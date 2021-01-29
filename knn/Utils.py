@@ -18,12 +18,13 @@ def plot2Dimensions(df, x, y, test_examples, figsize=((20,6))):
     
     _ = plt.figure(figsize=figsize)
     test_label = "Exemplos Teste"
-    g1 = sns.scatterplot(data=df, x=x, y=y, hue="target", palette="bright",edgecolor="black")
-    g2 = plt.scatter(test_examples[:,0], test_examples[:,1], s=60, c="k", marker = "+", label = test_label)
+    g1 = sns.scatterplot(data=df, x=x, y=y, hue="target", palette="bright",edgecolor="black", linewidth=1.5)
+    g2 = plt.scatter(test_examples[:,0], test_examples[:,1], s=150, c="k", marker = "X", label = test_label)
     
     handles, labels  =  g1.get_legend_handles_labels()
     labels = [f"Classe {col}" for col in range(len(labels)-1)] + [test_label]
     g1.legend(handles, labels, shadow=True)
+    plt.title(f"Localização dos {len(test_examples)} pontos teste.")
     plt.show()
     
     
@@ -31,18 +32,19 @@ def plot_Kneighbors(df_distance, x, y, test_examples, figsize=((20,6)), k_neighb
     
     _ = plt.figure(figsize=figsize)
     test_label = "Exemplos Teste"
-    g1 = sns.scatterplot(data=df_distance, x=x, y=y, hue="target", palette="bright",edgecolor="black")
-    g2 = plt.scatter(test_examples[:,0], test_examples[:,1], s=80, c="k", marker = "+", label = test_label)
+    g1 = sns.scatterplot(data=df_distance, x=x, y=y, hue="target", palette="bright",edgecolor="black", linewidth=1.5)
+    g2 = plt.scatter(test_examples[:,0], test_examples[:,1], s=150, c="k", marker = "X", label = test_label)
     
     for test_example, col in zip(test_examples, df_distance.filter(regex = "distance")):
         
         aux=df_distance.nsmallest(k_neighbors, col).filter(regex="feature")
         for _, val in aux.iterrows():
-            _ = plt.plot([test_example[0], val[x]], [test_example[1], val[y]], 'go--', c='k', linewidth=1, marker='+')
+            _ = plt.plot([test_example[0], val[x]], [test_example[1], val[y]], 'go--', c='k', linewidth=1.5, marker='+')
     
     handles, labels = g1.get_legend_handles_labels()
     labels = [f"Classe {col}" for col in range(len(labels)-1)] + [test_label]
     g1.legend(handles, labels, shadow=True)
+    plt.title(f"Vizinhos mais próximos dos {len(test_examples)} pontos teste.")
     plt.show()
     
 def my_final_plot_comparison(df, fst_dim, snd_dim):
@@ -56,8 +58,9 @@ def my_final_plot_comparison(df, fst_dim, snd_dim):
                          marker="o",
                          style="tipo",
                          palette="bright",
-                         alpha=0.5,
+                         alpha=0.8,
                          s=100,
+                         linewidth=1.5,
                          edgecolor="black",
                          ax=ax)
 
@@ -104,8 +107,15 @@ def plot_decision_boundary_k(X_df, y_df, n_neighbors_lst):
         ax.contourf(xx, yy, Z, cmap=cmap_light)
 
         # Plot also the training points
-        sns.scatterplot(x=X[:, 0], y=X[:, 1], hue=y,
-                        palette=cmap_bold, alpha=1.0, edgecolor="black", ax=ax)
+        sns.scatterplot(x=X[:, 0], 
+                        y=X[:, 1], 
+                        hue=y,
+                        palette=cmap_bold, 
+                        alpha=1.0, 
+                        edgecolor="black", 
+                        linewidth=1.5, 
+                        ax=ax)
+        
         plt.xlim(xx.min(), xx.max())
         plt.ylim(yy.min(), yy.max())
         ax.set_title(f"3-Class classification ($k$ = {k_neighbors})")
