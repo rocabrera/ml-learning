@@ -51,6 +51,8 @@ for epoch in range(num_epochs):
     for i, (images, labels) in enumerate(train_loader):
         images = images.reshape(-1, 28 * 28).to(device)
         labels = labels.to(device)
+        print(images.shape, labels.shape)
+        
 
         # forward
         outputs = model(images)
